@@ -34,6 +34,7 @@ public class RobotPathPlanning extends Application
         GridPane root = new GridPane();
         root.setAlignment(Pos.CENTER);
 
+        // Testing a new GitHub comments
         Boolean isAvailable;
         Boolean isStart;
         Boolean isFinish;
@@ -77,12 +78,10 @@ public class RobotPathPlanning extends Application
 
     public void calculateAStar(Square start, Square finish)
     {
-        LinkedList<Square> closedSet = new LinkedList<Square>();
 
         LinkedList<Square> openSet = new LinkedList<Square>();
         openSet.add(start);
 
-        HashMap<Integer, Square> cameFrom = new HashMap<Integer, Square>();
 
     }
 
