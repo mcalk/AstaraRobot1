@@ -9,20 +9,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-
 public class RobotPathPlanning extends Application
 {
-	private int n = 20;
+	private int n = 10;
 	private int m = 10;
 
 	Square[][] playfield = new Square[n][m];
 
-	private int[][] map = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-			{ 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 }, { 3, 0, 0, 1, 0, 0, 1, 0, 0, 0 },
+	private int[][] map = { { 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 },
+			{ 3, 0, 0, 1, 0, 0, 1, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 },
 			{ 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 },
-			{ 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 }, { 3, 1, 1, 1, 1, 1, 1, 1, 1, 2 } };
+			{ 3, 1, 1, 1, 1, 1, 1, 1, 1, 2 } };
 
 	public static void main(String[] args)
 	{
