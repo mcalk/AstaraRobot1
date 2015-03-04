@@ -1,3 +1,6 @@
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import javafx.application.Application;
@@ -78,7 +81,7 @@ public class RobotPathPlanning extends Application
 		}
 
 		Scene scene = new Scene(root, 650, 650, Color.DARKVIOLET);
-		System.out.println(calculateDistanceToGoal(playfield[8][8],
+		System.out.println(calculateShortestDistanceTo(playfield[8][8],
 				playfield[0][1]));
 
 		stage.setScene(scene);
@@ -87,15 +90,69 @@ public class RobotPathPlanning extends Application
 
 	public void calculateAStar(Square start, Square finish)
 	{
-
 		LinkedList<Square> openSet = new LinkedList<Square>();
+		LinkedList<Square> closedSet = new LinkedList<Square>();
+
 		openSet.add(start);
 
+		Square cameFrom;
+
+		start.setgScore(0);
+		start.setfScore(start.getgScore()
+				+ calculateShortestDistanceTo(start, finish)); // Check
+
+		while(!openSet.isEmpty())
+		{
+			Square current = getMinHeuristic(openSet);
+			if(current.equals(finish))
+//				return reconstructPath(cameFrom,finish);
+			
+			openSet.remove(current);
+			closedSet.add(current);
+			
+//			for ( )
+			Square neibourNode = current;//change
+			int tentative = 0;
+			
+			if(closedSet.contains(neibourNode))
+			{
+				continue;
+			}
+			tentative = current.getgScore() + calculateShortestDistanceTo(current, neibourNode);
+			
+			if(!openSet.contains(neibourNode) || tentative < neibourNode.getgScore())
+			{
+				neibourNode.setCameFrom(current);
+				neibourNode.setgScore(tentative);
+				neibourNode.setfScore(neibourNode.getgScore() + calculateShortestDistanceTo(neibourNode, finish));
+				if(!openSet.contains(neibourNode))
+					openSet.add(neibourNode);
+			}
+		}
+		
 	}
 
-	public int calculateDistanceToGoal(Square currentNode, Square finalNode)
+
+	/**
+	 * Method which calculates the shortest path to the distance, not taking
+	 * into account the obstacles it can encounter on the way
+	 * 
+	 * @param fromNode
+	 *            Node from which you want to calculate the distance.
+	 * @param toNode
+	 *            Node to which you want to calculate the distance.
+	 * @return Distance value as an integer.
+	 */
+	public int calculateShortestDistanceTo(Square fromNode, Square toNode)
 	{
-		return Math.abs(currentNode.getxPos() - finalNode.getxPos())
-				+ Math.abs(currentNode.getyPos() - finalNode.getyPos());
+		return Math.abs(fromNode.getxPos() - toNode.getxPos())
+				+ Math.abs(fromNode.getyPos() - toNode.getyPos());
+	}
+
+	public static Square getMinHeuristic(LinkedList<Square> list)
+	{
+		Square min = Collections.min(list);
+
+		return min;
 	}
 }
