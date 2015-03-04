@@ -11,17 +11,16 @@ import javafx.stage.Stage;
 
 public class RobotPathPlanning extends Application
 {
-	private int n = 10;
-	private int m = 10;
+	private int n = 9;
+	private int m = 9;
 
 	Square[][] playfield = new Square[n][m];
 
-	private int[][] map = { { 3, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
-			{ 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 },
-			{ 3, 0, 0, 1, 0, 0, 1, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 },
-			{ 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0, 0 },
-			{ 3, 1, 1, 1, 1, 1, 1, 1, 1, 2 } };
+	private int[][] map = { { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 3, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 1, 0, 0, 0, 0, 0 }, { 3, 0, 0, 1, 0, 0, 3, 0, 0 },
+			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 1, 0, 0, 3, 0, 0, 1, 0, 0 },
+			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 3, 1, 1, 1, 1, 1, 1, 1, 2 } };
 
 	public static void main(String[] args)
 	{
@@ -79,7 +78,7 @@ public class RobotPathPlanning extends Application
 		}
 
 		Scene scene = new Scene(root, 650, 650, Color.DARKVIOLET);
-		System.out.println(calculateDistanceToGoal(playfield[9][9],
+		System.out.println(calculateDistanceToGoal(playfield[8][8],
 				playfield[0][1]));
 
 		stage.setScene(scene);

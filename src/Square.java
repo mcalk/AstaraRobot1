@@ -28,10 +28,18 @@ public class Square extends StackPane
         if ( isStart )
             rectangle.setFill(Color.GREEN);
 
-        if ( hasBall )
-            rectangle.setFill(Color.GOLD);
 
         getChildren().add(rectangle);
+        
+        if ( hasBall )
+        {
+        	rectangle.setFill(Color.ANTIQUEWHITE);
+            Circle circ = new Circle(15);
+            circ.setFill(Color.BLACK);
+            getChildren().add(circ);
+        }
+            
+
     }
 
     public int getxPos()
