@@ -11,7 +11,7 @@ public class Square extends StackPane implements Comparable<Square>
 
 	private Square up, down, left, right, cameFrom;
 
-	private LinkedList<Square> neibourghsList = new LinkedList<Square>();
+	//private LinkedList<Square> neibourghsList = new LinkedList<Square>();
 
 	private int gScore, fScore;
 
