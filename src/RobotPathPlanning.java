@@ -78,6 +78,8 @@ public class RobotPathPlanning extends Application
 
 				root.add(square, i, j);
 			}
+
+			this.genereteNeibours();
 		}
 
 		Scene scene = new Scene(root, 650, 650, Color.DARKVIOLET);
@@ -101,37 +103,39 @@ public class RobotPathPlanning extends Application
 		start.setfScore(start.getgScore()
 				+ calculateShortestDistanceTo(start, finish)); // Check
 
-		while(!openSet.isEmpty())
+		while (!openSet.isEmpty())
 		{
 			Square current = getMinHeuristic(openSet);
-			if(current.equals(finish))
-//				return reconstructPath(cameFrom,finish);
-			
-			openSet.remove(current);
+			if ( current.equals(finish) )
+				// return reconstructPath(cameFrom,finish);
+
+				openSet.remove(current);
 			closedSet.add(current);
-			
-//			for ( )
-			Square neibourNode = current;//change
+
+			// for ( )
+			Square neibourNode = current;// change
 			int tentative = 0;
-			
-			if(closedSet.contains(neibourNode))
+
+			if ( closedSet.contains(neibourNode) )
 			{
 				continue;
 			}
-			tentative = current.getgScore() + calculateShortestDistanceTo(current, neibourNode);
-			
-			if(!openSet.contains(neibourNode) || tentative < neibourNode.getgScore())
+			tentative = current.getgScore()
+					+ calculateShortestDistanceTo(current, neibourNode);
+
+			if ( !openSet.contains(neibourNode)
+					|| tentative < neibourNode.getgScore() )
 			{
 				neibourNode.setCameFrom(current);
 				neibourNode.setgScore(tentative);
-				neibourNode.setfScore(neibourNode.getgScore() + calculateShortestDistanceTo(neibourNode, finish));
-				if(!openSet.contains(neibourNode))
+				neibourNode.setfScore(neibourNode.getgScore()
+						+ calculateShortestDistanceTo(neibourNode, finish));
+				if ( !openSet.contains(neibourNode) )
 					openSet.add(neibourNode);
 			}
 		}
-		
-	}
 
+	}
 
 	/**
 	 * Method which calculates the shortest path to the distance, not taking
@@ -147,6 +151,33 @@ public class RobotPathPlanning extends Application
 	{
 		return Math.abs(fromNode.getxPos() - toNode.getxPos())
 				+ Math.abs(fromNode.getyPos() - toNode.getyPos());
+	}
+
+	public void genereteNeibours()
+	{
+		for (int i = 0; i < playfield.length; i++)
+		{
+			for (int j = 0; j < playfield[0].length; j++)
+			{
+				Square square = playfield[i][j];
+				Square up = null, down = null, right = null, left = null;
+
+				if ( j > 1 )
+					up = playfield[i][j - 1];
+				
+				if ( i < n - 1 )
+					right = playfield[i + 1][j];
+				
+				if ( i > 1 )
+					left = playfield[i - 1][j];
+				
+				if ( j < m - 1 )
+					down = playfield[i][j + 1];
+
+				square.setSquaresAround(up, right, down, left);
+
+			}
+		}
 	}
 
 	public static Square getMinHeuristic(LinkedList<Square> list)
