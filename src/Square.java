@@ -9,7 +9,47 @@ public class Square extends StackPane implements Comparable<Square>
 {
 	private Boolean isAccessible, isStart, hasBall, isFinish = false;
 
-	private Square up, down, left, right, cameFrom;
+	private Square up = null, down = null, left = null, right = null, cameFrom;
+
+	public Square getUp()
+	{
+		return up;
+	}
+
+	public void setUp(Square up)
+	{
+		this.up = up;
+	}
+
+	public Square getDown()
+	{
+		return down;
+	}
+
+	public void setDown(Square down)
+	{
+		this.down = down;
+	}
+
+	public Square getLeft()
+	{
+		return left;
+	}
+
+	public void setLeft(Square left)
+	{
+		this.left = left;
+	}
+
+	public Square getRight()
+	{
+		return right;
+	}
+
+	public void setRight(Square right)
+	{
+		this.right = right;
+	}
 
 	private LinkedList<Square> neibourghsList = new LinkedList<Square>();
 
@@ -36,7 +76,6 @@ public class Square extends StackPane implements Comparable<Square>
 	}
 
 	private int xPos, yPos;
-
 
 	public Square(int x, int y, Boolean isAccessible, Boolean isStart,
 			Boolean hasBall)
@@ -121,7 +160,7 @@ public class Square extends StackPane implements Comparable<Square>
 
 		getChildren().add(circle);
 	}
-	
+
 	public Square getCameFrom()
 	{
 		return cameFrom;
