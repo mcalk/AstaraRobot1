@@ -11,6 +11,7 @@ public class Square extends StackPane implements Comparable<Square>
 
 	private Square up, down, left, right, cameFrom;
 
+	private Rectangle rectangle;
 	private Boolean isEmpty = false;
 
 	private int gScore, fScore;
@@ -47,7 +48,7 @@ public class Square extends StackPane implements Comparable<Square>
 		this.hasBall = hasBall;
 
 		// create rectangle
-		Rectangle rectangle = new Rectangle(50, 50);
+		rectangle = new Rectangle(50, 50);
 		rectangle.setStroke(Color.BLACK);
 		if ( isAccessible )
 			rectangle.setFill(Color.ANTIQUEWHITE);
@@ -67,6 +68,16 @@ public class Square extends StackPane implements Comparable<Square>
 			getChildren().add(circ);
 		}
 
+	}
+
+	public Rectangle getRectangle()
+	{
+		return rectangle;
+	}
+
+	public void setRectangle(Rectangle rectangle)
+	{
+		this.rectangle = rectangle;
 	}
 
 	public Square(Boolean isEmpty)

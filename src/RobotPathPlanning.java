@@ -1,19 +1,31 @@
 import java.util.Collections;
 import java.util.LinkedList;
 
+import javafx.animation.PathTransition;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class RobotPathPlanning extends Application
 {
 	private int n = 9;
 	private int m = 9;
+
+	BorderPane borderPane = new BorderPane();
+	GridPane root = new GridPane();
 
 	Square[][] playfield = new Square[n][m];
 
@@ -35,7 +47,6 @@ public class RobotPathPlanning extends Application
 	{
 		stage.setTitle("Robot Path Planning");
 
-		GridPane root = new GridPane();
 		root.setAlignment(Pos.CENTER);
 
 		Boolean isAvailable;
@@ -87,13 +98,28 @@ public class RobotPathPlanning extends Application
 
 		}
 
-		Scene scene = new Scene(root, 650, 650, Color.DARKVIOLET);
+		borderPane.setCenter(root);
+		Button btn = new Button("Click to show the path");
+		btn.setOnAction(new EventHandler<ActionEvent>()
+		{
+
+			@Override
+			public void handle(ActionEvent arg0)
+			{
+				// TODO Auto-generated method stub
+				animateWay();
+			}
+		});
+
+		borderPane.setBottom(btn);
+
+		Scene scene = new Scene(borderPane, 650, 650, Color.DARKVIOLET);
 		System.out.println(calculateShortestDistanceTo(playfield[8][8],
 				playfield[0][1]));
 
 		this.genereteNeibours();
 
-		this.calculateAStar(playfield[8][8], playfield[0][0]);
+		this.calculateAStar(playfield[2][3], playfield[0][0]);
 
 		for (Square sqr : listOfNodesToFollow)
 		{
@@ -108,6 +134,16 @@ public class RobotPathPlanning extends Application
 	{
 		LinkedList<Square> openSet = new LinkedList<Square>();
 		LinkedList<Square> closedSet = new LinkedList<Square>();
+
+		// Adding nodes not accessible into closedSet!
+		for (int i = 0; i < 9; i++)
+		{
+			for (int j = 0; j < 9; j++)
+			{
+				if ( map[i][j] == 0 )
+					closedSet.add(playfield[i][j]);
+			}
+		}
 
 		openSet.add(start);
 
@@ -235,5 +271,38 @@ public class RobotPathPlanning extends Application
 		Square min = Collections.min(list);
 
 		return min;
+	}
+
+	public void animateWay()
+	{
+		PathTransition pathTransition = new PathTransition();
+		Path path = new Path();
+		
+		path.getElements().add(new MoveTo(25, 25));
+		
+		for (Square sqr : listOfNodesToFollow)
+		{
+			path.getElements().add(
+					new LineTo(sqr.getxPos() * 50, sqr.getyPos() * 50));
+		}
+		path.setOpacity(0.5);
+
+		Circle circle = new Circle(20, 20, 15);
+		circle.setFill(Color.DARKBLUE);
+
+		root.getChildren().add(path);
+		root.getChildren().add(circle);
+
+		pathTransition.setDuration(Duration.seconds(8.0));
+		pathTransition.setDelay(Duration.seconds(.5));
+		pathTransition.setPath(path);
+		pathTransition.setNode(circle);
+		// pathTransition
+		// .setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+		pathTransition.setCycleCount(1);
+		pathTransition.setAutoReverse(true);
+
+		pathTransition.play();
+
 	}
 }
