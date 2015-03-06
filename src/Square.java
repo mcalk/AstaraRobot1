@@ -1,9 +1,9 @@
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 public class Square extends StackPane implements Comparable<Square>
 {
@@ -11,7 +11,7 @@ public class Square extends StackPane implements Comparable<Square>
 
 	private Square up, down, left, right, cameFrom;
 
-	private LinkedList<Square> neibourghsList = new LinkedList<Square>();
+	private Boolean isEmpty = false;
 
 	private int gScore, fScore;
 
@@ -36,7 +36,6 @@ public class Square extends StackPane implements Comparable<Square>
 	}
 
 	private int xPos, yPos;
-
 
 	public Square(int x, int y, Boolean isAccessible, Boolean isStart,
 			Boolean hasBall)
@@ -70,6 +69,12 @@ public class Square extends StackPane implements Comparable<Square>
 
 	}
 
+	public Square(Boolean isEmpty)
+	{
+		super();
+		this.isEmpty = isEmpty;
+	}
+
 	public int getxPos()
 	{
 		return xPos;
@@ -79,7 +84,7 @@ public class Square extends StackPane implements Comparable<Square>
 			Square left)
 	{
 		this.up = up;
-		this.right = up;
+		this.right = right;
 		this.down = down;
 		this.left = left;
 	}
@@ -121,7 +126,7 @@ public class Square extends StackPane implements Comparable<Square>
 
 		getChildren().add(circle);
 	}
-	
+
 	public Square getCameFrom()
 	{
 		return cameFrom;
@@ -130,6 +135,22 @@ public class Square extends StackPane implements Comparable<Square>
 	public void setCameFrom(Square cameFrom)
 	{
 		this.cameFrom = cameFrom;
+	}
+
+	public ArrayList<Square> getNeighbours()
+	{
+		ArrayList<Square> listToReturn = new ArrayList<Square>();
+
+		if ( !up.isEmpty )
+			listToReturn.add(up);
+		if ( !right.isEmpty )
+			listToReturn.add(right);
+		if ( !down.isEmpty )
+			listToReturn.add(down);
+		if ( !left.isEmpty )
+			listToReturn.add(left);
+
+		return listToReturn;
 	}
 
 	@Override

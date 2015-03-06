@@ -1,6 +1,4 @@
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import javafx.application.Application;
@@ -68,8 +66,14 @@ public class RobotPathPlanning extends Application
 					public void handle(MouseEvent arg0)
 					{
 						// TODO Auto-generated method stub
-						System.out.println("Clicked (" + square.getxPos()
-								+ ", " + square.getyPos() + ")");
+						System.out.println("Neighbours of clicked square: ");
+						for (Square sqr : square.getNeighbours())
+						{
+							System.out.println("( " + sqr.getxPos() + ", "
+									+ sqr.getyPos() + ")");
+						}
+						// System.out.println("Clicked (" + square.getxPos()
+						// + ", " + square.getyPos() + ")");
 					}
 
 				});
@@ -79,13 +83,13 @@ public class RobotPathPlanning extends Application
 				root.add(square, i, j);
 			}
 
-			this.genereteNeibours();
 		}
 
 		Scene scene = new Scene(root, 650, 650, Color.DARKVIOLET);
 		System.out.println(calculateShortestDistanceTo(playfield[8][8],
 				playfield[0][1]));
 
+		this.genereteNeibours();
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -96,8 +100,6 @@ public class RobotPathPlanning extends Application
 		LinkedList<Square> closedSet = new LinkedList<Square>();
 
 		openSet.add(start);
-
-		Square cameFrom;
 
 		start.setgScore(0);
 		start.setfScore(start.getgScore()
@@ -112,26 +114,27 @@ public class RobotPathPlanning extends Application
 				openSet.remove(current);
 			closedSet.add(current);
 
-			// for ( )
-			Square neibourNode = current;// change
-			int tentative = 0;
-
-			if ( closedSet.contains(neibourNode) )
+			for (Square neighbourNode : current.getNeighbours())
 			{
-				continue;
-			}
-			tentative = current.getgScore()
-					+ calculateShortestDistanceTo(current, neibourNode);
+				int tentative = 0;
 
-			if ( !openSet.contains(neibourNode)
-					|| tentative < neibourNode.getgScore() )
-			{
-				neibourNode.setCameFrom(current);
-				neibourNode.setgScore(tentative);
-				neibourNode.setfScore(neibourNode.getgScore()
-						+ calculateShortestDistanceTo(neibourNode, finish));
-				if ( !openSet.contains(neibourNode) )
-					openSet.add(neibourNode);
+				if ( closedSet.contains(neighbourNode) )
+				{
+					continue;
+				}
+				tentative = current.getgScore()
+						+ calculateShortestDistanceTo(current, neighbourNode);
+
+				if ( !openSet.contains(neighbourNode)
+						|| tentative < neighbourNode.getgScore() )
+				{
+					neighbourNode.setCameFrom(current);
+					neighbourNode.setgScore(tentative);
+					neighbourNode.setfScore(neighbourNode.getgScore()
+							+ calculateShortestDistanceTo(neighbourNode, finish));
+					if ( !openSet.contains(neighbourNode) )
+						openSet.add(neighbourNode);
+				}
 			}
 		}
 
@@ -155,25 +158,44 @@ public class RobotPathPlanning extends Application
 
 	public void genereteNeibours()
 	{
-		for (int i = 0; i < playfield.length; i++)
+		for (int i = 0; i < 9; i++)
 		{
-			for (int j = 0; j < playfield[0].length; j++)
+			for (int j = 0; j < 9; j++)
 			{
 				Square square = playfield[i][j];
-				Square up = null, down = null, right = null, left = null;
 
-				if ( j > 1 )
+				Square up = new Square(true);
+				Square down = new Square(true);
+				Square right = new Square(true);
+				Square left = new Square(true);
+
+				// System.out.println("Current square position is ("
+				// + square.getxPos() + ", " + square.getyPos() + ")");
+
+				if ( j != 0 )
+				{
 					up = playfield[i][j - 1];
-				
-				if ( i < n - 1 )
+					// System.out.println("Up is ( " + up.getxPos() + ", "
+					// + up.getyPos() + ")");
+				}
+				if ( i != n - 1 )
+				{
 					right = playfield[i + 1][j];
-				
-				if ( i > 1 )
+					// System.out.println("Right is ( " + right.getxPos() + ", "
+					// + right.getyPos() + ")");
+				}
+				if ( i != 0 )
+				{
 					left = playfield[i - 1][j];
-				
-				if ( j < m - 1 )
+					// System.out.println("Left is ( " + left.getxPos() + ", "
+					// + left.getyPos() + ")");
+				}
+				if ( j != m - 1 )
+				{
 					down = playfield[i][j + 1];
-
+					// System.out.println("Down is ( " + down.getxPos() + ", "
+					// + down.getyPos() + ")");
+				}
 				square.setSquaresAround(up, right, down, left);
 
 			}
