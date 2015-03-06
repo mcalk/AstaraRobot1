@@ -23,6 +23,8 @@ public class RobotPathPlanning extends Application
 {
 	private int n = 9;
 	private int m = 9;
+	
+	private Square startPoint;
 
 	BorderPane borderPane = new BorderPane();
 	GridPane root = new GridPane();
@@ -146,6 +148,7 @@ public class RobotPathPlanning extends Application
 		}
 
 		openSet.add(start);
+		startPoint = finish;
 
 		start.setgScore(0);
 		start.setfScore(start.getgScore()
@@ -277,23 +280,26 @@ public class RobotPathPlanning extends Application
 	{
 		PathTransition pathTransition = new PathTransition();
 		Path path = new Path();
+
 		
-		path.getElements().add(new MoveTo(25, 25));
+		//path.getElements().add(new MoveTo(25, 25));
+		
+		path.getElements().add(new MoveTo(startPoint.getxPos()*50+25,startPoint.getyPos()*50+25));
 		
 		for (Square sqr : listOfNodesToFollow)
 		{
 			path.getElements().add(
-					new LineTo(sqr.getxPos() * 50, sqr.getyPos() * 50));
+					new LineTo(sqr.getxPos() * 50+25, sqr.getyPos() * 50+25));
 		}
 		path.setOpacity(0.5);
 
-		Circle circle = new Circle(20, 20, 15);
+		Circle circle = new Circle(25, 25, 15);
 		circle.setFill(Color.DARKBLUE);
 
-		root.getChildren().add(path);
+	//	root.getChildren().add(path);
 		root.getChildren().add(circle);
 
-		pathTransition.setDuration(Duration.seconds(8.0));
+		pathTransition.setDuration(Duration.seconds(4.0));
 		pathTransition.setDelay(Duration.seconds(.5));
 		pathTransition.setPath(path);
 		pathTransition.setNode(circle);
