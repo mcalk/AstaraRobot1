@@ -15,6 +15,8 @@ public class Square extends StackPane implements Comparable<Square>
 
 	private int gScore, fScore;
 
+	private int xPos, yPos;
+
 	public int getgScore()
 	{
 		return gScore;
@@ -34,8 +36,6 @@ public class Square extends StackPane implements Comparable<Square>
 	{
 		this.fScore = hScore;
 	}
-
-	private int xPos, yPos;
 
 	public Square(int x, int y, Boolean isAccessible, Boolean isStart,
 			Boolean hasBall)
@@ -151,6 +151,12 @@ public class Square extends StackPane implements Comparable<Square>
 			listToReturn.add(left);
 
 		return listToReturn;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "(" + xPos + ", " + yPos + ")";
 	}
 
 	@Override

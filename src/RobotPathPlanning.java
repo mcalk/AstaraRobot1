@@ -23,6 +23,8 @@ public class RobotPathPlanning extends Application
 			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 1, 0, 0, 3, 0, 0, 1, 0, 0 },
 			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 3, 1, 1, 1, 1, 1, 1, 1, 2 } };
 
+	private LinkedList<Square> listOfNodesToFollow;
+
 	public static void main(String[] args)
 	{
 		launch(args);
@@ -90,6 +92,14 @@ public class RobotPathPlanning extends Application
 				playfield[0][1]));
 
 		this.genereteNeibours();
+
+		this.calculateAStar(playfield[8][8], playfield[0][0]);
+
+		for (Square sqr : listOfNodesToFollow)
+		{
+			System.out.println(sqr.toString());
+		}
+
 		stage.setScene(scene);
 		stage.show();
 	}
@@ -109,9 +119,10 @@ public class RobotPathPlanning extends Application
 		{
 			Square current = getMinHeuristic(openSet);
 			if ( current.equals(finish) )
-				// return reconstructPath(cameFrom,finish);
+				listOfNodesToFollow = reconstructPath(current.getCameFrom(),
+						finish);
 
-				openSet.remove(current);
+			openSet.remove(current);
 			closedSet.add(current);
 
 			for (Square neighbourNode : current.getNeighbours())
@@ -130,14 +141,31 @@ public class RobotPathPlanning extends Application
 				{
 					neighbourNode.setCameFrom(current);
 					neighbourNode.setgScore(tentative);
-					neighbourNode.setfScore(neighbourNode.getgScore()
-							+ calculateShortestDistanceTo(neighbourNode, finish));
+					neighbourNode
+							.setfScore(neighbourNode.getgScore()
+									+ calculateShortestDistanceTo(
+											neighbourNode, finish));
 					if ( !openSet.contains(neighbourNode) )
 						openSet.add(neighbourNode);
 				}
 			}
 		}
 
+	}
+
+	private LinkedList<Square> reconstructPath(Square cameFrom, Square finish)
+	{
+		LinkedList<Square> listToReturn = new LinkedList<Square>();
+
+		while (!cameFrom.equals(finish))
+		{
+			listToReturn.add(cameFrom);
+			cameFrom = cameFrom.getCameFrom();
+			if ( cameFrom == null )
+				break;
+		}
+
+		return listToReturn;
 	}
 
 	/**
