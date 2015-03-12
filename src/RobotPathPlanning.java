@@ -21,21 +21,26 @@ import javafx.util.Duration;
 
 public class RobotPathPlanning extends Application
 {
-	private int n = 9;
-	private int m = 9;
-	
+	private final int COLUMNS = 18;
+	private final int ROWS = 9;
+
 	private Square startPoint;
 
 	BorderPane borderPane = new BorderPane();
 	GridPane root = new GridPane();
 
-	Square[][] playfield = new Square[n][m];
+	Square[][] playfield = new Square[COLUMNS][ROWS];
 
 	private int[][] map = { { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 3, 0, 0, 0, 0, 0 },
-			{ 1, 0, 0, 1, 0, 0, 0, 0, 0 }, { 3, 0, 0, 1, 0, 0, 3, 0, 0 },
-			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 1, 0, 0, 3, 0, 0, 1, 0, 0 },
-			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 3, 1, 1, 1, 1, 1, 1, 1, 2 } };
+			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 3, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0, 0, 0 },
+			{ 3, 0, 0, 1, 0, 0, 3, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0 },
+			{ 1, 0, 0, 3, 0, 0, 1, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0 },
+			{ 3, 1, 1, 1, 1, 1, 1, 1, 2 } };
 
 	private LinkedList<Square> listOfNodesToFollow;
 
@@ -62,7 +67,7 @@ public class RobotPathPlanning extends Application
 				isFinish = false;
 				isStart = false;
 
-				if ( map[i][j] == 1 )
+				if ( map[i][j] == 1 || map[i][j] == 3 )
 					isAvailable = true;
 				else
 					isAvailable = false;
@@ -121,12 +126,12 @@ public class RobotPathPlanning extends Application
 
 		this.genereteNeibours();
 
-		this.calculateAStar(playfield[2][3], playfield[0][0]);
+		this.calculateAStar(playfield[5][0], playfield[0][0]);
 
-		for (Square sqr : listOfNodesToFollow)
-		{
-			System.out.println(sqr.toString());
-		}
+//		for (Square sqr : listOfNodesToFollow)
+//		{
+//			System.out.println(sqr.toString());
+//		}
 
 		stage.setScene(scene);
 		stage.show();
@@ -138,9 +143,9 @@ public class RobotPathPlanning extends Application
 		LinkedList<Square> closedSet = new LinkedList<Square>();
 
 		// Adding nodes not accessible into closedSet!
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < COLUMNS; i++)
 		{
-			for (int j = 0; j < 9; j++)
+			for (int j = 0; j < ROWS; j++)
 			{
 				if ( map[i][j] == 0 )
 					closedSet.add(playfield[i][j]);
@@ -225,9 +230,9 @@ public class RobotPathPlanning extends Application
 
 	public void genereteNeibours()
 	{
-		for (int i = 0; i < 9; i++)
+		for (int i = 0; i < COLUMNS; i++)
 		{
-			for (int j = 0; j < 9; j++)
+			for (int j = 0; j < ROWS; j++)
 			{
 				Square square = playfield[i][j];
 
@@ -236,32 +241,32 @@ public class RobotPathPlanning extends Application
 				Square right = new Square(true);
 				Square left = new Square(true);
 
-				// System.out.println("Current square position is ("
-				// + square.getxPos() + ", " + square.getyPos() + ")");
+//				 System.out.println("Current square position is ("
+//				 + square.getxPos() + ", " + square.getyPos() + ")");
 
 				if ( j != 0 )
 				{
 					up = playfield[i][j - 1];
-					// System.out.println("Up is ( " + up.getxPos() + ", "
-					// + up.getyPos() + ")");
+//					 System.out.println("Up is ( " + up.getxPos() + ", "
+//					 + up.getyPos() + ")");
 				}
-				if ( i != n - 1 )
+				if ( i != COLUMNS - 1 )
 				{
 					right = playfield[i + 1][j];
-					// System.out.println("Right is ( " + right.getxPos() + ", "
-					// + right.getyPos() + ")");
+//					 System.out.println("Right is ( " + right.getxPos() + ", "
+//					 + right.getyPos() + ")");
 				}
 				if ( i != 0 )
 				{
 					left = playfield[i - 1][j];
-					// System.out.println("Left is ( " + left.getxPos() + ", "
-					// + left.getyPos() + ")");
+//					 System.out.println("Left is ( " + left.getxPos() + ", "
+//					 + left.getyPos() + ")");
 				}
-				if ( j != m - 1 )
+				if ( j != ROWS - 1 )
 				{
 					down = playfield[i][j + 1];
-					// System.out.println("Down is ( " + down.getxPos() + ", "
-					// + down.getyPos() + ")");
+//					 System.out.println("Down is ( " + down.getxPos() + ", "
+//					 + down.getyPos() + ")");
 				}
 				square.setSquaresAround(up, right, down, left);
 
@@ -281,22 +286,24 @@ public class RobotPathPlanning extends Application
 		PathTransition pathTransition = new PathTransition();
 		Path path = new Path();
 
-		
-		//path.getElements().add(new MoveTo(25, 25));
-		
-		path.getElements().add(new MoveTo(startPoint.getxPos()*50+25,startPoint.getyPos()*50+25));
-		
+		// path.getElements().add(new MoveTo(25, 25));
+
+		path.getElements().add(
+				new MoveTo(startPoint.getxPos() * 50 + 25,
+						startPoint.getyPos() * 50 + 25));
+
 		for (Square sqr : listOfNodesToFollow)
 		{
-			path.getElements().add(
-					new LineTo(sqr.getxPos() * 50+25, sqr.getyPos() * 50+25));
+			path.getElements()
+					.add(new LineTo(sqr.getxPos() * 50 + 40,
+							sqr.getyPos() * 50 + 25));
 		}
-		path.setOpacity(0.5);
+		// path.setOpacity(0.5);
 
 		Circle circle = new Circle(25, 25, 15);
 		circle.setFill(Color.DARKBLUE);
 
-	//	root.getChildren().add(path);
+		// root.getChildren().add(path);
 		root.getChildren().add(circle);
 
 		pathTransition.setDuration(Duration.seconds(4.0));
