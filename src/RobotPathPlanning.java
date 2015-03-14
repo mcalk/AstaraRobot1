@@ -1,10 +1,12 @@
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Random;
 
 import javafx.animation.PathTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -32,15 +34,15 @@ public class RobotPathPlanning extends Application
 	Square[][] playfield = new Square[COLUMNS][ROWS];
 
 	private int[][] map = { { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 3, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
-			{ 1, 0, 0, 3, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0, 0, 0 },
-			{ 3, 0, 0, 1, 0, 0, 3, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0 },
-			{ 1, 0, 0, 3, 0, 0, 1, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0 },
-			{ 3, 1, 1, 1, 1, 1, 1, 1, 2 } };
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 1, 0, 0, 0, 0, 0 }, { 3, 0, 0, 1, 0, 0, 0, 0, 0 },
+			{ 1, 0, 0, 1, 0, 0, 3, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0 },
+			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 3, 1, 1, 1, 1, 1, 1, 1, 2 },
+			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0 },
+			{ 1, 0, 0, 1, 0, 0, 3, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0, 0, 0 },
+			{ 3, 0, 0, 1, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0,0, 0, 0 },
+			{ 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 	private LinkedList<Square> listOfNodesToFollow;
 
@@ -118,20 +120,23 @@ public class RobotPathPlanning extends Application
 			}
 		});
 
+		BorderPane.setAlignment(btn, Pos.CENTER);
+		BorderPane.setMargin(btn, new Insets(0,0,30,0));
 		borderPane.setBottom(btn);
 
-		Scene scene = new Scene(borderPane, 650, 650, Color.DARKVIOLET);
-		System.out.println(calculateShortestDistanceTo(playfield[8][8],
-				playfield[0][1]));
+		Scene scene = new Scene(borderPane, 950, 650, Color.ALICEBLUE);
 
 		this.genereteNeibours();
 
-		this.calculateAStar(playfield[5][0], playfield[0][0]);
+		this.calculateAStar(playfield[14][3], playfield[0][0]);
 
-//		for (Square sqr : listOfNodesToFollow)
-//		{
-//			System.out.println(sqr.toString());
-//		}
+		PathCreator pathToFollow = new PathCreator(listOfNodesToFollow);
+		pathToFollow.printInstructions();
+		
+		// for (Square sqr : listOfNodesToFollow)
+		// {
+		// System.out.println(sqr.toString());
+		// }
 
 		stage.setScene(scene);
 		stage.show();
@@ -241,32 +246,32 @@ public class RobotPathPlanning extends Application
 				Square right = new Square(true);
 				Square left = new Square(true);
 
-//				 System.out.println("Current square position is ("
-//				 + square.getxPos() + ", " + square.getyPos() + ")");
+				// System.out.println("Current square position is ("
+				// + square.getxPos() + ", " + square.getyPos() + ")");
 
 				if ( j != 0 )
 				{
 					up = playfield[i][j - 1];
-//					 System.out.println("Up is ( " + up.getxPos() + ", "
-//					 + up.getyPos() + ")");
+					// System.out.println("Up is ( " + up.getxPos() + ", "
+					// + up.getyPos() + ")");
 				}
 				if ( i != COLUMNS - 1 )
 				{
 					right = playfield[i + 1][j];
-//					 System.out.println("Right is ( " + right.getxPos() + ", "
-//					 + right.getyPos() + ")");
+					// System.out.println("Right is ( " + right.getxPos() + ", "
+					// + right.getyPos() + ")");
 				}
 				if ( i != 0 )
 				{
 					left = playfield[i - 1][j];
-//					 System.out.println("Left is ( " + left.getxPos() + ", "
-//					 + left.getyPos() + ")");
+					// System.out.println("Left is ( " + left.getxPos() + ", "
+					// + left.getyPos() + ")");
 				}
 				if ( j != ROWS - 1 )
 				{
 					down = playfield[i][j + 1];
-//					 System.out.println("Down is ( " + down.getxPos() + ", "
-//					 + down.getyPos() + ")");
+					// System.out.println("Down is ( " + down.getxPos() + ", "
+					// + down.getyPos() + ")");
 				}
 				square.setSquaresAround(up, right, down, left);
 
