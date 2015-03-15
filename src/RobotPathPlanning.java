@@ -40,7 +40,7 @@ public class RobotPathPlanning extends Application
 			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 3, 1, 1, 1, 1, 1, 1, 1, 2 },
 			{ 1, 0, 0, 1, 0, 0, 1, 0, 0 }, { 1, 0, 0, 1, 0, 0, 1, 0, 0 },
 			{ 1, 0, 0, 1, 0, 0, 3, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0, 0, 0 },
-			{ 3, 0, 0, 1, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0,0, 0, 0 },
+			{ 3, 0, 0, 1, 0, 0, 0, 0, 0 }, { 1, 0, 0, 1, 0, 0, 0, 0, 0 },
 			{ 1, 0, 0, 0, 0, 0, 0, 0, 0 }, { 1, 0, 0, 0, 0, 0, 0, 0, 0 },
 			{ 3, 0, 0, 0, 0, 0, 0, 0, 0 } };
 
@@ -121,7 +121,7 @@ public class RobotPathPlanning extends Application
 		});
 
 		BorderPane.setAlignment(btn, Pos.CENTER);
-		BorderPane.setMargin(btn, new Insets(0,0,30,0));
+		BorderPane.setMargin(btn, new Insets(0, 0, 30, 0));
 		borderPane.setBottom(btn);
 
 		Scene scene = new Scene(borderPane, 950, 650, Color.ALICEBLUE);
@@ -132,7 +132,7 @@ public class RobotPathPlanning extends Application
 
 		PathCreator pathToFollow = new PathCreator(listOfNodesToFollow);
 		pathToFollow.printInstructions();
-		
+
 		// for (Square sqr : listOfNodesToFollow)
 		// {
 		// System.out.println(sqr.toString());
@@ -168,9 +168,10 @@ public class RobotPathPlanning extends Application
 		{
 			Square current = getMinHeuristic(openSet);
 			if ( current.equals(finish) )
-				listOfNodesToFollow = reconstructPath(current.getCameFrom(),
-						finish);
+			{
 
+				listOfNodesToFollow = reconstructPath(current);
+			}
 			openSet.remove(current);
 			closedSet.add(current);
 
@@ -202,16 +203,14 @@ public class RobotPathPlanning extends Application
 
 	}
 
-	private LinkedList<Square> reconstructPath(Square cameFrom, Square finish)
+	private LinkedList<Square> reconstructPath(Square cameFrom)
 	{
 		LinkedList<Square> listToReturn = new LinkedList<Square>();
 
-		while (!cameFrom.equals(finish))
+		while (cameFrom != null)
 		{
 			listToReturn.add(cameFrom);
 			cameFrom = cameFrom.getCameFrom();
-			if ( cameFrom == null )
-				break;
 		}
 
 		return listToReturn;
