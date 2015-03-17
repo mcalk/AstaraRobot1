@@ -1,6 +1,6 @@
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Random;
+import java.util.Stack;
 
 import javafx.animation.PathTransition;
 import javafx.application.Application;
@@ -13,16 +13,23 @@ import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class RobotPathPlanning extends Application
 {
+	private static final int START_X = 8;
+	private static final int START_Y = 8;
+	private static final int FINISH_X = 0;
+	private static final int FINISH_Y = 0;
+	
 	private final int COLUMNS = 18;
 	private final int ROWS = 9;
 
@@ -94,8 +101,6 @@ public class RobotPathPlanning extends Application
 							System.out.println("( " + sqr.getxPos() + ", "
 									+ sqr.getyPos() + ")");
 						}
-						// System.out.println("Clicked (" + square.getxPos()
-						// + ", " + square.getyPos() + ")");
 					}
 
 				});
@@ -128,15 +133,10 @@ public class RobotPathPlanning extends Application
 
 		this.genereteNeibours();
 
-		this.calculateAStar(playfield[14][3], playfield[0][0]);
+		this.calculateAStar(playfield[START_X][START_Y], playfield[FINISH_X][FINISH_Y]);
 
 		PathCreator pathToFollow = new PathCreator(listOfNodesToFollow);
 		pathToFollow.printInstructions();
-
-		// for (Square sqr : listOfNodesToFollow)
-		// {
-		// System.out.println(sqr.toString());
-		// }
 
 		stage.setScene(scene);
 		stage.show();
@@ -158,7 +158,7 @@ public class RobotPathPlanning extends Application
 		}
 
 		openSet.add(start);
-		startPoint = finish;
+		startPoint = start;
 
 		start.setgScore(0);
 		start.setfScore(start.getgScore()
@@ -206,11 +206,17 @@ public class RobotPathPlanning extends Application
 	private LinkedList<Square> reconstructPath(Square cameFrom)
 	{
 		LinkedList<Square> listToReturn = new LinkedList<Square>();
+		Stack<Square> stack = new Stack<>();
 
 		while (cameFrom != null)
 		{
-			listToReturn.add(cameFrom);
+			stack.push(cameFrom);
 			cameFrom = cameFrom.getCameFrom();
+		}
+
+		while (!stack.isEmpty())
+		{
+			listToReturn.add(stack.pop());
 		}
 
 		return listToReturn;
@@ -290,7 +296,7 @@ public class RobotPathPlanning extends Application
 		PathTransition pathTransition = new PathTransition();
 		Path path = new Path();
 
-		// path.getElements().add(new MoveTo(25, 25));
+		System.out.println(startPoint.getxPos() + ", " + startPoint.getyPos());
 
 		path.getElements().add(
 				new MoveTo(startPoint.getxPos() * 50 + 25,
@@ -299,23 +305,31 @@ public class RobotPathPlanning extends Application
 		for (Square sqr : listOfNodesToFollow)
 		{
 			path.getElements()
-					.add(new LineTo(sqr.getxPos() * 50 + 40,
+					.add(new LineTo(sqr.getxPos() * 50 + 25,
 							sqr.getyPos() * 50 + 25));
 		}
-		// path.setOpacity(0.5);
 
-		Circle circle = new Circle(25, 25, 15);
-		circle.setFill(Color.DARKBLUE);
+		StackPane stackPane = new StackPane();
+		Rectangle rectangle = new Rectangle(25, 40);
+		Rectangle rectangleTracks = new Rectangle(35, 10);
+		Circle circle = new Circle(5);
+
+		rectangleTracks.setFill(Color.BLACK);
+		rectangle.setFill(Color.BLACK);
+		circle.setFill(Color.WHITE);
+
+		stackPane.getChildren().add(rectangleTracks);
+		stackPane.setAlignment(rectangleTracks, Pos.BOTTOM_CENTER);
+		stackPane.getChildren().add(rectangle);
+		stackPane.getChildren().add(circle);
 
 		// root.getChildren().add(path);
-		root.getChildren().add(circle);
+		root.getChildren().add(stackPane);
 
 		pathTransition.setDuration(Duration.seconds(4.0));
 		pathTransition.setDelay(Duration.seconds(.5));
 		pathTransition.setPath(path);
-		pathTransition.setNode(circle);
-		// pathTransition
-		// .setOrientation(PathTransition.OrientationType.ORTHOGONAL_TO_TANGENT);
+		pathTransition.setNode(stackPane);
 		pathTransition.setCycleCount(1);
 		pathTransition.setAutoReverse(true);
 

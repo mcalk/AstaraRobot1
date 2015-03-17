@@ -8,22 +8,27 @@ public class PathCreator
 	public PathCreator(LinkedList<Square> list)
 	{
 		listOfInstructions = listOfInstructions(list);
-		
+
+	}
+
+	public enum Direction
+	{
+		UP, DOWN, RIGHT, LEFT
 	}
 
 	private ArrayList<String> listOfInstructions(LinkedList<Square> list)
 	{
 		listOfInstructions = new ArrayList<String>();
 
-		int cnt = 0;
 		Square prev = null;
+		Direction direction = Direction.UP;
 
 		for (Square sqr : list)
 		{
-			if ( cnt == 0 )
+			if ( prev == null )
 			{
 				prev = sqr;
-				cnt++;
+				continue;
 			}
 			else
 			{
@@ -31,16 +36,63 @@ public class PathCreator
 				int yDiff = sqr.getyPos() - prev.getyPos();
 
 				if ( xDiff == -1 )
-					listOfInstructions.add("GO LEFT");
+				{
+					if ( direction == Direction.UP )
+					{
+						listOfInstructions.add("TURN LEFT");
+						direction = Direction.LEFT;
+					}
+					if ( direction == Direction.DOWN )
+					{
+						listOfInstructions.add("TURN RIGHT");
+						direction = Direction.RIGHT;
+					}
+				}
 				else if ( xDiff == 1 )
-					listOfInstructions.add("GO RIGHT");
-				else if ( yDiff == -1 )
-					listOfInstructions.add("GO UP");
-				else if ( yDiff == 1 )
-					listOfInstructions.add("GO DOWN");
+				{
+					if ( direction == Direction.DOWN )
+					{
+						listOfInstructions.add("TURN LEFT");
+						direction = Direction.LEFT;
+					}
+					if ( direction == Direction.UP )
+					{
+						listOfInstructions.add("TURN RIGHT");
+						direction = Direction.RIGHT;
+					}
 
+				}
+
+				else if ( yDiff == -1 )
+				{
+					if ( direction == Direction.LEFT )
+					{
+						listOfInstructions.add("TURN LEFT");
+						direction = Direction.DOWN;
+					}
+					if ( direction == Direction.RIGHT )
+					{
+						listOfInstructions.add("TURN RIGHT");
+						direction = Direction.UP;
+					}
+				}
+				else if ( yDiff == 1 )
+				{
+					if ( direction == Direction.LEFT )
+					{
+						listOfInstructions.add("TURN LEFT");
+						direction = Direction.UP;
+					}
+					if ( direction == Direction.RIGHT )
+					{
+						listOfInstructions.add("TURN RIGHT");
+						direction = Direction.DOWN;
+					}
+				}
 				prev = sqr;
+				listOfInstructions.add("GO FORWARD");
 			}
+
 		}
 
 		return listOfInstructions;
@@ -48,7 +100,7 @@ public class PathCreator
 
 	public void printInstructions()
 	{
-		for(String str:listOfInstructions)
+		for (String str : listOfInstructions)
 		{
 			System.out.println(str);
 		}
