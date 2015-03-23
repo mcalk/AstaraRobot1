@@ -1,4 +1,5 @@
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Stack;
 
@@ -296,11 +297,23 @@ public class RobotPathPlanning extends Application
 		PathTransition pathTransition = new PathTransition();
 		Path path = new Path();
 
+
 		System.out.println(startPoint.getxPos() + ", " + startPoint.getyPos());
 
 		path.getElements().add(
 				new MoveTo(startPoint.getxPos() * 50 + 25,
 						startPoint.getyPos() * 50 + 25));
+
+
+		
+		//path.getElements().add(new MoveTo(25, 25));
+		Iterator bla = listOfNodesToFollow.descendingIterator();
+		
+		// bla = listOfNodesToFollow.descendingIterator();
+		
+
+		path.getElements().add(new MoveTo(startPoint.getxPos()*50+25,startPoint.getyPos()*50+25));
+		
 
 		for (Square sqr : listOfNodesToFollow)
 		{
