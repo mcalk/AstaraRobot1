@@ -134,7 +134,7 @@ public class NXC {
 
 					gScoresMap[currentNeighbourX][currentNeighbourY] = tentative;
 					fScoresMap[currentNeighbourX][currentNeighbourY] = tentative
-							+ calculateShortestDistanceTo(currentNeighbourY,
+							+ calculateShortestDistanceTo(currentNeighbourX,
 									currentNeighbourY, finishX, finishY);
 
 					if (!contains(openSet, openSetHead, openSetTail,
