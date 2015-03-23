@@ -94,6 +94,9 @@ public class NXC {
 				// TO-DO
 				// Implement reconstructing the path
 				// listOfNodesToFollow = reconstructPath(current);
+				listOfNodesToFollow[listOfNodesPointer][0] = finishX;
+			    listOfNodesToFollow[listOfNodesPointer][1] = finishY;
+			    listOfNodesPointer++;
 				System.out.println("We have reached the finish! YAAAAY");
 				return listOfNodesToFollow;
 			}
