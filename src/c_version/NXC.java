@@ -335,7 +335,6 @@ public class NXC {
 
 			for (int i = 0; i < tail; i++) {
 
-
 				if (cameFrom[i][0] == nextX && cameFrom[i][1] == nextY) {
 
 					nextX = cameFrom[i][2];
